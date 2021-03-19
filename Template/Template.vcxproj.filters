@@ -154,7 +154,7 @@
       <Filter>Decision\Agents</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Agent.cpp">
-      <Filter>Decision\Agents</Filter>
+      <Filter>Decision\Core Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -312,7 +312,7 @@
       <Filter>Decision\Agents</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Agent.h">
-      <Filter>Decision\Agents</Filter>
+      <Filter>Decision\Core Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

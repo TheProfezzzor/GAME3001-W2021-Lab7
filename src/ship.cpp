@@ -18,17 +18,16 @@ Ship::Ship() : m_maxSpeed(10.0f)
 	getRigidBody()->isColliding = false;
 	setType(SHIP);
 	
-	m_currentHeading = 0.0f; // current facing angle
-	m_currentDirection = glm::vec2(1.0f, 0.0f); // facing right
+	setCurrentHeading(0.0f); // current facing angle
+	setCurrentDirection(glm::vec2(1.0f, 0.0f)); // facing right
 	m_turnRate = 5.0f; // 5 degrees per frame
 
-	m_LOSDistance = 400.0f; // 5 ppf x 80 feet
-	m_LOSColour = glm::vec4(1, 0, 0, 1);
+	setLOSDistance(400.0f); // 5 ppf x 80 feet
+	setLOSColour(glm::vec4(1, 0, 0, 1));
+	setHasLOS(false); // Extra
 }
 
-
-Ship::~Ship()
-= default;
+Ship::~Ship()= default;
 
 void Ship::draw()
 {
@@ -37,10 +36,10 @@ void Ship::draw()
 	const auto y = getTransform()->position.y;
 
 	// draw the ship
-	TextureManager::Instance()->draw("ship", x, y, m_currentHeading, 255, true);
+	TextureManager::Instance()->draw("ship", x, y, getCurrentHeading(), 255, true);
 
 	// draw LOS
-	Util::DrawLine(getTransform()->position, getTransform()->position + getCurrentDirection() * m_LOSDistance, m_LOSColour);
+	Util::DrawLine(getTransform()->position, getTransform()->position + getCurrentDirection() * getLOSDistance(), getLOSColour());
 }
 
 
@@ -50,39 +49,34 @@ void Ship::update()
 	m_checkBounds();*/
 }
 
-void Ship::clean()
-{
-}
+void Ship::clean(){}
 
 void Ship::turnRight()
 {
-	m_currentHeading += m_turnRate;
-	if (m_currentHeading >= 360) 
+	setCurrentHeading(getCurrentHeading() + m_turnRate);
+	if (getCurrentHeading() >= 360)
 	{
-		m_currentHeading -= 360.0f;
+		setCurrentHeading(getCurrentHeading() - 360.0f);
 	}
-	m_changeDirection();
 }
 
 void Ship::turnLeft()
 {
-	m_currentHeading -= m_turnRate;
-	if (m_currentHeading < 0)
+	setCurrentHeading(getCurrentHeading() - m_turnRate);
+	if (getCurrentHeading() < 0)
 	{
-		m_currentHeading += 360.0f;
+		setCurrentHeading(getCurrentHeading() + 360.0f);
 	}
-
-	m_changeDirection();
 }
 
 void Ship::moveForward()
 {
-	getRigidBody()->velocity = m_currentDirection * m_maxSpeed;
+	getRigidBody()->velocity = getCurrentDirection() * m_maxSpeed;
 }
 
 void Ship::moveBack()
 {
-	getRigidBody()->velocity = m_currentDirection * -m_maxSpeed;
+	getRigidBody()->velocity = getCurrentDirection() * -m_maxSpeed;
 }
 
 void Ship::move()
@@ -91,70 +85,15 @@ void Ship::move()
 	getRigidBody()->velocity *= 0.9f;
 }
 
-glm::vec2 Ship::getTargetPosition() const
-{
-	return m_targetPosition;
-}
-
-glm::vec2 Ship::getCurrentDirection() const
-{
-	return m_currentDirection;
-}
-
 float Ship::getMaxSpeed() const
 {
 	return m_maxSpeed;
-}
-
-float Ship::getLOSDistance() const
-{
-	return m_LOSDistance;
-}
-
-bool Ship::hasLOS() const
-{
-	return m_hasLOS;
-}
-
-float Ship::getCurrentHeading() const
-{
-	return m_currentHeading;
-}
-
-void Ship::setLOSDistance(const float distance)
-{
-	m_LOSDistance = distance;
-}
-
-void Ship::setHasLOS(const bool state)
-{
-	m_hasLOS = state;
-	m_LOSColour = (m_hasLOS) ? glm::vec4(0, 1, 0, 1) : glm::vec4(1, 0, 0, 1);
-}
-
-void Ship::setCurrentHeading(const float heading)
-{
-	m_currentHeading = heading;
-	m_changeDirection();
-}
-
-void Ship::setTargetPosition(glm::vec2 newPosition)
-{
-	m_targetPosition = newPosition;
-
-}
-
-void Ship::setCurrentDirection(glm::vec2 newDirection)
-{
-	m_currentDirection = newDirection;
 }
 
 void Ship::setMaxSpeed(float newSpeed)
 {
 	m_maxSpeed = newSpeed;
 }
-
-
 
 void Ship::m_checkBounds()
 {
@@ -178,7 +117,6 @@ void Ship::m_checkBounds()
 	{
 		getTransform()->position = glm::vec2(getTransform()->position.x, 600.0f);
 	}
-
 }
 
 void Ship::m_reset()
@@ -188,14 +126,5 @@ void Ship::m_reset()
 	const auto xComponent = rand() % (640 - getWidth()) + halfWidth + 1;
 	const auto yComponent = -getHeight();
 	getTransform()->position = glm::vec2(xComponent, yComponent);
-}
-
-void Ship::m_changeDirection()
-{
-	const auto x = cos(m_currentHeading * Util::Deg2Rad);
-	const auto y = sin(m_currentHeading * Util::Deg2Rad);
-	m_currentDirection = glm::vec2(x, y);
-
-	glm::vec2 size = TextureManager::Instance()->getTextureSize("ship");
 }
 

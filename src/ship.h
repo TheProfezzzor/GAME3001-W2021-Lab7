@@ -2,11 +2,11 @@
 #ifndef __SHIP__
 #define __SHIP__
 
-#include "DisplayObject.h"
+#include "Agent.h"
 #include "TextureManager.h"
 #include <glm/vec4.hpp>
 
-class Ship final : public DisplayObject
+class Ship final : public Agent
 {
 public:
 	Ship();
@@ -17,30 +17,18 @@ public:
 	void update() override;
 	void clean() override;
 
+	// movement
 	void turnRight();
 	void turnLeft();
 	void moveForward();
 	void moveBack();
-	
 	void move();
 
-	// getters
-	glm::vec2 getTargetPosition() const;
-	glm::vec2 getCurrentDirection() const;
+	// getter
 	float getMaxSpeed() const;
 	
-	float getLOSDistance() const;
-	bool hasLOS() const;
-	float getCurrentHeading() const;
-
-	// setters
-	void setTargetPosition(glm::vec2 newPosition);
-	void setCurrentDirection(glm::vec2 newDirection);
+	// setter
 	void setMaxSpeed(float newSpeed);
-
-	void setLOSDistance(float distance);
-	void setHasLOS(bool state);
-	void setCurrentHeading(float heading);
 
 private:
 	void m_checkBounds();
@@ -49,16 +37,6 @@ private:
 	// steering behaviours
 	float m_maxSpeed;
 	float m_turnRate;
-
-	void m_changeDirection();
-	float m_currentHeading;
-	glm::vec2 m_currentDirection;
-	glm::vec2 m_targetPosition;
-
-	// LOS
-	float m_LOSDistance;
-	bool m_hasLOS;
-	glm::vec4 m_LOSColour;
 };
 
 
