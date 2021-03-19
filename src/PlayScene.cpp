@@ -117,7 +117,7 @@ void PlayScene::GUI_Function()
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 	
-	ImGui::Begin("GAME3001 - Lab 6", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("GAME3001 - Lab 7", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 
 	// allow ship rotation
 	static int angle;
